@@ -9,4 +9,5 @@ export interface ReviewParams {
   userId:number
   rating:number
   content:string
+  image_paths:[]
 }

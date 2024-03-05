@@ -1,4 +1,3 @@
-
 <template>
     <div class="content">
         <el-form :model="form">
@@ -6,14 +5,25 @@
                 <el-rate v-model="form.rating" :texts="['不推荐', '失望', '正常', '好', '棒极了']" show-text />
             </el-form-item>
             <el-form-item label="点评内容">
-                <el-input v-model="form.content" autocomplete="off"  type="textarea"/>
+                <el-input v-model="form.content" autocomplete="off" type="textarea" />
+            </el-form-item>
+            <el-form-item label="上传图片">
+                <el-upload v-model:file-list="form.image_paths" :limit="3" :on-exceed="handleExceed"
+                    :before-upload="beforeUpload" :on-success="handleUploadSuccess" list-type="picture-card"
+                    :auto-upload="false"> <el-icon>
+                        <Plus />
+                    </el-icon></el-upload>
+                <!-- 图片预览对话框 -->
+                <el-dialog :visible.sync="dialogVisible" width="30%">
+                    <img width="100%" :src="dialogImageUrl" alt="预览图片">
+                </el-dialog>
             </el-form-item>
         </el-form>
         <div class="demo-drawer__footer">
-            <!-- <el-button @click="cancelForm">取消</el-button> -->
+
             <el-button type="primary" :loading="loading" @click="onClick">{{
-                loading ? '发表中 ...' : '发表'
-            }}</el-button>
+            loading ? '发表中 ...' : '发表'
+                }}</el-button>
         </div>
     </div>
 </template>
@@ -21,7 +31,7 @@
 <script setup lang="ts">
 import { postReview } from '/@/api';
 import { useStore } from '/@/store/modules/user';
-
+import { Plus } from '@element-plus/icons-vue'
 
 const store = useStore()
 const props = defineProps({
@@ -31,40 +41,65 @@ const props = defineProps({
     },
 });
 
-
 const loading = ref(false)
 
 const form = reactive({
     attId: props.msg,
     userId: store.userId as unknown as number,
-    rating: 0,
-    content: ''
-
-
+    rating: 0, content: '',
+    image_paths: []
 })
-
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+const handleExceed = (files: any, fileList: any) => {
+    ElMessage({
+        type: 'warning', message: `当前限制选择 3 张图片，本次选择了 ${files.length} 张图片，共选择了 ${fileList.length} 张图片`
+    })
+};
+const beforeUpload = (file: any) => {
+    const isJPG = file.type === 'image/jpeg';
+    const isPNG = file.type === 'image/png';
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isJPG && !isPNG) {
+        ElMessage({
+            type: 'error', message: '上传图片只能是 JPG/PNG 格式!'
+        })
+    }
+    if (!isLt2M) {
+        ElMessage({
+            type: 'error', message: '上传图片大小不能超过 2MB!'
+        })
+    }
+    return isJPG || isPNG && isLt2M;
+};
 const onClick = async () => {
-
     loading.value = true
+    const formData = new FormData();
+    formData.append('attId', form.attId);
+    formData.append('userId', form.userId);
+    formData.append('rating', form.rating);
+    formData.append('content', form.content);
+    form.image_paths.forEach((image, index) => {
+        formData.append(`image_paths[${index}]`, image.raw);
+    });
     await postReview(form).then(res => {
-        console.log(res);
-        loading.value = false
+        console.log('form', form); loading.value = false
     }).catch(e => {
         console.log(e);
-
     })
 }
-const cancelForm = () => {
-    loading.value = false
-    form.content = ''
-    form.rating = 0
+const handleUploadSuccess = (response) => {
+    if (response && response.url) {
+        form.image_paths.push({ url: response.url });
+        dialogImageUrl.value = response.url;
+        dialogVisible.value = true;
+    }
+};
 
-}
 </script>
 
 <style scoped>
-
-.content{
+.content {
     padding-left: 50px
 }
 </style>

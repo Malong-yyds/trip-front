@@ -22,11 +22,11 @@ interface CustomRequestConfig<T, R> extends RequestConfig<CustomResponse<R>> {
 }
 
 // 基础 URL  
-const baseUrl = 'http://127.0.0.1:5000/api/';
+export const baseUrl = 'http://127.0.0.1:5000/';
 
 // 创建 Request 实例并配置  
 const request = new Request({
-  baseURL: baseUrl,
+  baseURL: baseUrl+'api/',
   timeout: 1000 * 60 * 5, // 设置超时时间为5分钟  
   interceptors: {
     // 请求拦截器，可以在这里对请求进行预处理  
@@ -50,7 +50,7 @@ const request = new Request({
       } else if (result.status == 422) {
         alert('用户信息已失效，请重新登录')
         router.push('/login')
-
+       
         throw new Error(`token失效 ${result.status}`);
       }
       else {

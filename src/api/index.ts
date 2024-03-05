@@ -1,5 +1,4 @@
 import request from '/@/service'
-import { useRequest } from '/@/hooks'
 import type { ReviewParams, UserParams } from './types'
 
 // 注册
@@ -38,6 +37,16 @@ export const attractionDetail=(attId:number)=>{
   })
 }
 
+// 用户评价
+export const attractionReviews=(attId:number)=>{
+  return request<number,any>({
+    url: '/review/detail', 
+    method: 'GET', 
+    params:attId, 
+    
+  })
+}
+
 // like    
 export const reviewLike=(reviewId:number)=>{
   return request<number,any>({
@@ -54,5 +63,8 @@ export const postReview=(data:ReviewParams)=>{
     url: '/review/add', 
     method: 'POST', 
     data,
+    headers:{
+      'Content-Type':'multipart/form-data'
+    }
   })
 }
