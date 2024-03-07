@@ -2,7 +2,7 @@
     <div>
         <el-card v-for="(spot, index) in paginatedSpots" :key="index" class="spot-card">
             <el-row>
-                <el-col :span="8">
+                <el-col :span="5">
                     <img class="scenic-spot-image" :src="spot.image_link" alt="景点图片" />
                 </el-col>
                 <el-col :span="9" class="left-aligned">
@@ -16,7 +16,7 @@
                 </el-col>
                 <el-col :span="7" class="right-aligned">
                     <p><el-rate v-model="spot.average_score" disabled show-score text-color="#ff9900"
-                            score-template="{value} 分" /></p>
+                            score-template="{value} 分" allow-half/></p>
                     <p>{{ spot.review_count }} 条评论</p>
                 </el-col>
             </el-row>
@@ -36,6 +36,7 @@ const router = useRouter();
 const store = useStore();  
 const route = useRoute()
 const flag = ref('')
+console.log(route.query);
 
 const spots = ref([])
 const totalSpots = ref(0);
@@ -61,15 +62,13 @@ onMounted(() => {
     getLsit()
     
 })
-// 返回有效的查询参数（index 或 keyword）  
-const activeQuery = computed(() => {  
-  return route.query.index || route.query.keyword;  
-});  
-  
-// 监听 activeQuery 的变化  
-watch(activeQuery, (newValue) => {  
-  flag.value = newValue; 
-  getLsit(); 
+
+watchEffect(() => {  
+    const activeQuery = route.query.index || route.query.keyword || route.query.cityId;  
+    flag.value = activeQuery;  
+    if (activeQuery) {  
+        getLsit();  
+    }  
 });  
 
 const pageSize = ref(5); 
@@ -89,25 +88,18 @@ const handlePageChange = (newPage:number) => {
 };
 
 const handleSpotClick = (id:number) => {
-    console.log(id);
-
-    if (!store.isLoggedIn) {  
-      // 如果用户未登录，提示用户登录  
-        alert('请先登录');  
-        router.push('/login');  
-    } else {  
         router.push({
             name: 'SpotDetail',
             query: { id } 
         });
-    }  
+  
 };
 </script>  
     
 <style scoped>
 .spot-card {
     margin: 15px;
-    /* height: 4%; */
+    height: fit-content;
     display: flex;
     flex-direction: column;
     border-radius: 8px;
@@ -115,18 +107,16 @@ const handleSpotClick = (id:number) => {
 
 .scenic-spot-image {
     width: 100%;
-    height: 100%;
-    border-radius: 8px 0 0 8px;
+    /* height: 100%; */
+    /* border-radius: 8px 0 0 8px; */
 
 }
-
-
 
 .left-aligned {
     display: flex;
     text-align: left;
     flex-direction: column;
-    padding: 20px;
+    padding-left: 10%;
 }
 
 .left-aligned h1 {
@@ -139,7 +129,6 @@ a:hover {
 }
 .right-aligned {
     display: flex;
-
     flex-direction: column;
     text-align: right;
     font-size: 16px;

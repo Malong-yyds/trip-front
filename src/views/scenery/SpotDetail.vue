@@ -2,13 +2,9 @@
     <div class="spot-page">
 
         <div class="upper-section section">
-            <!-- <div class="image-carousel"> -->
             <el-image :src="spot.image_link" alt="景点图片" class="image">
-                <!-- <el-carousel-item v-for="(item, index) in images" :key="index">
-                        <img :src="item" alt="景点图片">
-                    </el-carousel-item> -->
             </el-image>
-            <!-- </div> -->
+
             <div class="spot-info">
                 <h2>{{ spot.name }}</h2>
                 <p><b>评分:</b> {{ spot.average_score ? spot.average_score : '暂无评' }}分</p>
@@ -23,9 +19,9 @@
                 <h3>景点详情</h3>
                 <p>{{ spot.description }}</p>
             </div>
-            <div class="section">
+            <div class="section" v-if="spot.tips">
                 <h3>必看贴士</h3>
-                <p>{{ spot.tips ? spot.tips : '暂无' }}</p>
+                <p>{{ spot.tips }}</p>
             </div>
             <div class="section">
                 <div class="comments-button">
@@ -44,53 +40,67 @@
 </template>  
     
 <script setup lang="ts">
-import PostReview from "./components/PostReview.vue";
-import { attractionDetail } from '/@/api';
-import { Edit } from '@element-plus/icons-vue'
-import  UserReview  from "./components/UserReview.vue";
+    import PostReview from "./components/PostReview.vue";
+    import { attractionDetail } from '/@/api';
+    import { Edit } from '@element-plus/icons-vue'
+    import  UserReview  from "./components/UserReview.vue";
+    import { useStore } from '/@/store/modules/user';
 
-const route = useRoute()
-const drawer = ref(false)
-const attId = ref(Number(route.query.id))
+    const route = useRoute()
+    const store=useStore()
+    const drawer = ref(false)
+    const attId = ref(Number(route.query.id))
 
-const showDrawer = () => {
-    drawer.value = true
-}
-const spot = reactive({
-    name: null,
+    const showDrawer = () => {
 
-    image_link: null,
-    address: null,
-    average_score: null,
-    review_count: null,
-    opening_hours: null,
-    official_phone: null,
-    description: null,
-    tips: null,
-})
-
-const getData = () => {
-    attractionDetail({ attId: Number(route.query.id) }).then(res => {
-        //  Object.assign() 会将这些额外的属性也复制到 spot 中
-        Object.assign(spot, res.data)
-    }).catch(e => {
-        console.log(e);
-
+        if (!store.isLoggedIn) {  
+        // 如果用户未登录，提示用户登录  
+            alert('请先登录');  
+            router.push('/login');  
+        } else {  
+            drawer.value = true
+        }  
+        
+    }
+    const spot = reactive({
+        name: null,
+        image_link: null,
+        address: null,
+        average_score: null,
+        review_count: null,
+        opening_hours: null,
+        official_phone: null,
+        description: null,
+        tips: null,
     })
-}
-onMounted(() => {
-    getData()
-})
 
+    const getData = () => {
+        attractionDetail({ attId: Number(route.query.id) }).then(res => {
+            //  Object.assign() 会将这些额外的属性也复制到 spot 中
+            Object.assign(spot, res.data)
+        }).catch(e => {
+            console.log(e);
 
+        })
+    }
+    onMounted(() => {
+        getData()
+    })
+
+    // 监听路由参数的变化，并在变化时更新 attId  
+    watch(() => route.query.id, (newVal) => {  
+      attId.value = Number(newVal);  
+      getData()
+      
+    });  
 </script>  
     
 <style scoped> .spot-page {
      display: flex;
      flex-direction: column;
      width: 100%;
-     margin: 0 auto;
-     padding: 20px;
+     /* margin: 0 auto; */
+     padding: 0 50px;
      box-sizing: border-box;
      text-align: left;
  }
@@ -104,8 +114,8 @@ onMounted(() => {
  .section {
      border: 1px solid #c6e2ff17;
      background-color: #c6e2ff17;
-     width: 100%;
-     padding: 20px;
+     width: 90%;
+     padding: 50px;
 
      margin-bottom: 20px;
 

@@ -68,3 +68,21 @@ export const postReview=(data:ReviewParams)=>{
     }
   })
 }
+
+export const userRecommend=(userId:number)=>{
+  return request<number,any>({
+    url: '/recommender/user', 
+    method: 'GET', 
+    params:userId, 
+    
+  })
+}
+
+
+export const popularRecommend=()=>{
+  return request<number,any>({
+    url: '/recommender/popular', 
+    method: 'GET',
+    
+  })
+}

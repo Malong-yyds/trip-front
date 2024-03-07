@@ -17,20 +17,25 @@ router.push({'name':'SceneryPage',query:{keyword}})
 
 <style scoped>
 .input-button-container {  
-    width: 90%;  
+    /* margin: 20px 5px 0 5px; */
     display: flex;  
-    align-items: center;  
+    /* align-items: center;   */
 }  
   
+.el-button--primary {
+    --el-button-bg-color: #f56610;
+    --el-button-border-color: #f56610;
+    --el-button-outline-color: #f56610;
+}
 .input-button-container > :first-child 
 {  
    
-    height: 50px;
+    height: 35px;
 }  
   
 .input-button-container > :last-child {  
 
-    height: 50px; 
+    height: 35px; 
   
 }  
   

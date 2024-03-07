@@ -2,7 +2,7 @@
     <div class="content">
         <el-form :model="form">
             <el-form-item label="总体评分">
-                <el-rate v-model="form.rating" :texts="['不推荐', '失望', '正常', '好', '棒极了']" show-text />
+                <el-rate v-model="form.rating" :texts="['不推荐', '失望', '正常', '好', '棒极了']" show-text allow-half />
             </el-form-item>
             <el-form-item label="点评内容">
                 <el-input v-model="form.content" autocomplete="off" type="textarea" />
@@ -46,7 +46,8 @@ const loading = ref(false)
 const form = reactive({
     attId: props.msg,
     userId: store.userId as unknown as number,
-    rating: 0, content: '',
+    rating: 0, 
+    content: '',
     image_paths: []
 })
 const dialogImageUrl = ref('')
@@ -83,7 +84,16 @@ const onClick = async () => {
         formData.append(`image_paths[${index}]`, image.raw);
     });
     await postReview(form).then(res => {
-        console.log('form', form); loading.value = false
+        console.log('form', form); 
+        loading.value = false
+        if(res.code==200){
+            ElMessage({
+                type:'success',
+                message:'发布成功'
+            })
+            form.rating=0
+            form.content=''
+        }
     }).catch(e => {
         console.log(e);
     })

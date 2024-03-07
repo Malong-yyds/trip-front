@@ -1,51 +1,44 @@
+
+<template>
+  <el-container style=" display: flex;">
+
+    <el-header style="height: 70px;  background-color: #F8961E; color: #fff;">
+      <MainHeader></MainHeader>
+    </el-header>
+
+    <el-container style="display: flex;flex-direction: row;">
+      <el-aside width="12%">
+        <SideBar/>
+      </el-aside>
+     
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+     <RecommendBar  style="flex: 1; "></RecommendBar>
+    </el-container>
+  </el-container>
+</template>
+
 <script setup lang="ts">
 import MainHeader from '../components/MainHeader.vue'
-import SearchBar from '../components/SearchBar.vue';
+import RecommendBar from '../components/RecommendBar.vue';
 import SideBar from '../components/SideBar.vue';
 
 </script>
 
 
-<template>
-  <div class="common-layout">
-    <el-container>
-
-      <el-header>
-        <MainHeader></MainHeader>
-      </el-header>
-      <el-container>
-        <el-aside width="200px">
-          <SideBar /> 
-        </el-aside> 
-        <el-main>
-          <div class="container">
-            <div class="search-box">
-              <SearchBar />
-            </div>
-            <router-view></router-view>
-          </div>
-        </el-main>
-      </el-container>
-    </el-container>
-  </div>
-</template>
-
 <style scoped>
-.container {
+.el-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
 }
 
-.search-box {
-  margin: 20px 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
+.el-aside,
+/* .el-divider, */
+.el-main {
+  height: calc(98vh - 80px);
 }
-
-.map-box {
-  flex: 1;
-}</style>
+.el-main{
+  width: 50%;
+}
+</style>

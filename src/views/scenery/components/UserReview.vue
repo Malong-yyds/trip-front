@@ -91,12 +91,30 @@ watch(props, (newValue) => {
   console.log('watch',newValue);
   
 });  
+
+watchEffect(() => {  
+    // const activeQuery = route.query.index || route.query.keyword || route.query.cityId;  
+    // flag.value = activeQuery;
+    console.log('watch',props.msg,attId.value);  
+    if (attId.value) {  
+        getData();  
+    }  
+});
 const handleLike = (id: number) => {
-    reviewLike({ reviewId: id }).then(res => {
+
+    if (!store.isLoggedIn) {  
+      // 如果用户未登录，提示用户登录  
+        alert('请先登录');  
+        router.push('/login');  
+    } else {  
+        reviewLike({ reviewId: id }).then(res => {
         getData()
+        console.log(res);
+        
     }).catch(e => {
         console.log(e);
     })
+    }
 }
 
 // 计算属性，用于分页显示评论  
