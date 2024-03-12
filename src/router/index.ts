@@ -8,7 +8,12 @@ import MainPage from '../views/main/MainPage.vue';
 import { useStore } from "/@/store/modules/user";
 // 配置路由信息
 const routes: RouteRecordRaw[] = [
+  {
+    name: 'login',
+    path: '/login',
+    component: () => import('/@/views/login/index.vue'),
 
+  },
 
   {
     path: '/',
@@ -38,16 +43,17 @@ const routes: RouteRecordRaw[] = [
         name: 'SpotDetail',
         component: SpotDetail
       },
+      {
+        name: 'profile',
+        path: '/profile',
+        component: () => import('/@/views/profile/index.vue'),
 
+      },
     ]
   },
 
-  {
-    name: 'login',
-    path: '/login',
-    component: () => import('/@/views/login/index.vue'),
 
-  },
+
 ]
 
 const router = createRouter({

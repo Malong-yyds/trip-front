@@ -31,7 +31,10 @@ const buttonText = computed(() => store.isLoggedIn ? '退出' : '登录'); // �
 
 // 处理点击头像跳转到个人信息页面  
 const goToProfile = () => {
-  // router.push({ name: 'Profile' }); // 假设'Profile'是个人信息页面的路由名称  
+  if(store.username){
+ router.push({ name: 'profile' });
+  }
+
 };
 
 // 处理点击登录/退出按钮  
