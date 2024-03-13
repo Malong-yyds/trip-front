@@ -23,9 +23,9 @@ router.push({'name':'SceneryPage',query:{keyword}})
 }  
   
 .el-button--primary {
-    --el-button-bg-color: #f56610;
-    --el-button-border-color: #f56610;
-    --el-button-outline-color: #f56610;
+    --el-button-bg-color: #70abcf;
+    --el-button-border-color: #70abcf;
+    --el-button-outline-color: #70abcf;
 }
 .input-button-container > :first-child 
 {  
