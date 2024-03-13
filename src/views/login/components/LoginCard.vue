@@ -2,7 +2,7 @@
   <el-card class="login-card h-60 w-96 md:rounded-lg" shadow="never">
 
     <div class="card-header">
-      <h3>粤史之旅推荐系统</h3>
+      <h3>粤红之旅推荐系统</h3>
     </div>
     <div class="main">
       <el-form ref="formRef" :model="formData" label-width="0">
@@ -30,7 +30,7 @@
           <el-button v-if="!isRegister" type="primary" class="w-full left-button" size="default"
             @click="handleLogin">登录</el-button>
           <el-button v-if="!isRegister" type="primary" class="w-full right-button" size="default"
-            @click="goRegister">注新用户册</el-button>
+            @click="goRegister">注册新用户</el-button>
           <el-button v-if="isRegister" type="primary" class="w-full right-button" size="default"
             @click="handleRegister">确定</el-button>
         </el-form-item>
