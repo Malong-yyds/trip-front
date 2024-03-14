@@ -36,23 +36,22 @@ const router = useRouter();
 const store = useStore();  
 const route = useRoute()
 const flag = ref('')
-console.log(route.query);
 
 const spots = ref([])
 const totalSpots = ref(0);
-const spot = reactive({
-    attraction_id: null,
-    name: null,
-    detail_page_link: null,
-    image_link: null,
-    address: null,
-    average_score: null,
-    review_count: null
-})
+
 const getLsit=()=>{
     attractionSearch({ q: flag.value }).then(res => {
         spots.value = res.data
         totalSpots.value = res.data.length
+        console.log('l',totalSpots.value);
+        if(totalSpots.value==0){
+            ElMessage({
+                type:'info',
+                message:'暂无结果，请换个关键词',
+                duration:1000
+            })
+        }
     }).catch(e => {
         console.log(e);
     })
