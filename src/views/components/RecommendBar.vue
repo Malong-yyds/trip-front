@@ -15,7 +15,7 @@
         </el-carousel>
     
         <div v-if="store.isLoggedIn" class="guess-you-like">
-            <div class="title">为你推荐</div>
+            <div class="title">专属推荐</div>
             <div v-for="item in guessItems" :key="item.id" class="guess-item" @click="handleItemClick(item.id)">
                 <div class="guess-img-wrapper">
                     <img :src="item.image_link" alt="Guess you like" class="guess-img">
