@@ -87,7 +87,7 @@ const goRegister = () => {
 }
 
 const handleRegister = () => {
-  if (formData.password !== confirmPassword.value) {
+  if ((formData.password !== confirmPassword.value)||formData.password ====''|| confirmPassword.value ==='') {
     ElMessage({
       message: '注册失败，两次密码不一致，请重新输入',
       type: 'error',
