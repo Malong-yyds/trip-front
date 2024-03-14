@@ -57,6 +57,7 @@
 
 import { attractionReviews, reviewLike } from '/@/api';
 import {baseUrl} from '/@/service'
+import { useStore } from '/@/store/modules/user';
 const avatarUrl = ref('/src/assets/user.png');
 const props = defineProps({
     msg: {
@@ -64,7 +65,8 @@ const props = defineProps({
         required: true,
     },
 });
-
+const store=useStore()
+const router=useRouter()
 const comments = ref([])
 const totalComments = ref(0)
 const currentPage = ref(1)
@@ -93,9 +95,6 @@ watch(props, (newValue) => {
 });  
 
 watchEffect(() => {  
-    // const activeQuery = route.query.index || route.query.keyword || route.query.cityId;  
-    // flag.value = activeQuery;
-    console.log('watch',props.msg,attId.value);  
     if (attId.value) {  
         getData();  
     }  
