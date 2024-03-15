@@ -1,6 +1,6 @@
 <template>
     <div class="input-button-container">
-        <el-input v-model="keyword" placeholder="请输入关键词"></el-input>
+        <el-input v-model="keyword" placeholder="请输入关键词" @keyup.enter="handleSearch"></el-input>
         <el-button type="primary" @click="handleSearch(keyword)">查找</el-button>
     </div>
 </template>
@@ -11,7 +11,11 @@ const keyword = ref('')
 
 const router=useRouter()
 const handleSearch=(keyword:string)=>{
-router.push({'name':'SceneryPage',query:{keyword}})
+    if (!keyword.trim()) { 
+        alert('请输入有效的关键词！');  
+        return; // 阻止路由跳转  
+    } 
+    router.push({'name':'SceneryPage',query:{keyword}})
 }
 </script>
 
