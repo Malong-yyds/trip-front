@@ -19,11 +19,17 @@ export const login = (data: UserParams) => {
   });
 }
 
-export const attractionSearch=(q:string)=>{
+
+export interface PageParams {
+  q:string
+  page:number
+  pageSize:number
+}
+
+export const attractionSearch=(q:string,page:number,pageSize:number)=>{
   return request<number,any>({
-    url: '/attraction/search', 
+    url: '/attraction/search'+'?page='+page+'&pageSize='+pageSize+'&q='+q, 
     method: 'GET', 
-    params:q, 
   })
 }
 
@@ -38,12 +44,10 @@ export const attractionDetail=(attId:number)=>{
 }
 
 // 用户评价
-export const attractionReviews=(attId:number)=>{
+export const attractionReviews=(attId:number,page:number,pageSize:number)=>{
   return request<number,any>({
-    url: '/review/detail', 
+    url: '/review/detail'+'?page='+page+'&pageSize='+pageSize+'&attId='+attId, 
     method: 'GET', 
-    params:attId, 
-    
   })
 }
 

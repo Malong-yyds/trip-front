@@ -1,7 +1,7 @@
 <template>
     <div>
     <div class="comments">
-        <div v-for="(comment, index) in paginatedComments" :key="index" class="comment">
+        <div v-for="(comment, index) in comments" :key="index" class="comment">
             <div class="comment-avatar">
                 <img :src="avatarUrl" alt="User Avatar" class="avatar" />
                 <p>{{ comment.username }}</p>
@@ -73,9 +73,9 @@ const currentPage = ref(1)
 const pageSize = ref(5)
 const attId=ref(props.msg)
 const getData = async () => {
-    await attractionReviews({ attId: attId.value }).then(res => {
-        comments.value = res.data
-        totalComments.value=comments.value.length
+    await attractionReviews( attId.value,currentPage.value,pageSize.value).then(res => {
+        comments.value = res.data.reviews_list
+        totalComments.value = res.data.total
     }).catch(e => {
         console.log(e);
     })
@@ -88,17 +88,11 @@ onMounted(() => {
 
 
 watch(props, (newValue) => {  
-  attId.value = newValue.msg; 
-  getData(); 
-  console.log('watch',newValue);
+  attId.value = newValue.msg
+  getData()
   
-});  
+})
 
-watchEffect(() => {  
-    if (attId.value) {  
-        getData();  
-    }  
-});
 const handleLike = (id: number) => {
 
     if (!store.isLoggedIn) {  
@@ -126,6 +120,7 @@ const paginatedComments = computed(() => {
 // 处理分页变化  
 const handlePageChange = (newPage: number) => {
     currentPage.value = newPage;
+    getData();  
 };
 
 </script>

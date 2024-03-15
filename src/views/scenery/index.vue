@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-card v-for="(spot, index) in paginatedSpots" :key="index" class="spot-card">
+        <el-card v-for="(spot, index) in spots" :key="index" class="spot-card">
             <el-row>
                 <el-col :span="5">
                     <img class="scenic-spot-image" :src="spot.image_link" alt="景点图片" />
@@ -9,47 +9,48 @@
                     <h1>
                         <el-icon>
                             <HomeFilled />
-                        </el-icon> <a @click="handleSpotClick(spot.attraction_id)">{{ spot.name }}</a></h1>
+                        </el-icon> <a @click="handleSpotClick(spot.attraction_id)">{{ spot.name }}</a>
+                    </h1>
                     <p> <el-icon>
                             <Location />
                         </el-icon> {{ spot.address }}</p>
                 </el-col>
                 <el-col :span="7" class="right-aligned">
                     <p><el-rate v-model="spot.average_score" disabled show-score text-color="#ff9900"
-                            score-template="{value} 分" allow-half/></p>
+                            score-template="{value} 分" allow-half /></p>
                     <p>{{ spot.review_count }} 条评论</p>
                 </el-col>
             </el-row>
         </el-card>
 
-        <el-pagination @size-change="handlePageSizeChange" @current-change="handlePageChange" :current-page="currentPage"
-            :page-size="pageSize" layout="prev, pager, next, jumper" :total="totalSpots"  hide-on-single-page></el-pagination>
+        <el-pagination @current-change="handlePageChange" :current-page="currentPage" :page-size="pageSize"
+            layout="prev, pager, next, jumper" :total="totalSpots" hide-on-single-page></el-pagination>
     </div>
 </template>
-    
+
 <script setup lang="ts">
 
 import { attractionSearch } from "/@/api/index";
 import { useStore } from '/@/store/modules/user';
-import { HomeFilled, Location} from "@element-plus/icons-vue";
+import { HomeFilled, Location } from "@element-plus/icons-vue";
 const router = useRouter();
-const store = useStore();  
+const store = useStore();
 const route = useRoute()
 const flag = ref('')
 
 const spots = ref([])
 const totalSpots = ref(0);
-
-const getLsit=()=>{
-    attractionSearch({ q: flag.value }).then(res => {
-        spots.value = res.data
-        totalSpots.value = res.data.length
-        console.log('l',totalSpots.value);
-        if(totalSpots.value==0){
+const pageSize = ref(5);
+const currentPage = ref(1);
+const getLsit = () => {
+    attractionSearch(flag.value, currentPage.value, pageSize.value).then(res => {
+        spots.value = res.data.attractions_list
+        totalSpots.value = res.data.total_count
+        if (totalSpots.value == 0) {
             ElMessage({
-                type:'info',
-                message:'暂无结果，请换个关键词',
-                duration:1000
+                type: 'info',
+                message: '暂无结果，请换个关键词',
+                duration: 1000
             })
         }
     }).catch(e => {
@@ -59,42 +60,32 @@ const getLsit=()=>{
 
 onMounted(() => {
     getLsit()
-    
+
 })
 
-watchEffect(() => {  
-    const activeQuery = route.query.index || route.query.keyword || route.query.cityId;  
-    flag.value = activeQuery;  
-    if (activeQuery) {  
-        getLsit();  
-    }  
-});  
-
-const pageSize = ref(5); 
-const currentPage = ref(1);
-const paginatedSpots = computed(() => {
-    const start = (currentPage.value - 1) * pageSize.value;
-    const end = start + pageSize.value;
-    return spots.value.slice(start, end);
+watchEffect(() => {
+    const activeQuery = route.query.index || route.query.keyword || route.query.cityId
+    flag.value = activeQuery
+    if (activeQuery) {
+        getLsit()
+    }
 });
 
-const handlePageSizeChange = (newPageSize:number) => {
-    pageSize.value = newPageSize;
-};
 
-const handlePageChange = (newPage:number) => {
+const handlePageChange = (newPage: number) => {
     currentPage.value = newPage;
+    getLsit();
 };
 
-const handleSpotClick = (id:number) => {
-        router.push({
-            name: 'SpotDetail',
-            query: { id } 
-        });
-  
+const handleSpotClick = (id: number) => {
+    router.push({
+        name: 'SpotDetail',
+        query: { id }
+    });
+
 };
-</script>  
-    
+</script>
+
 <style scoped>
 .spot-card {
     margin: 15px;
@@ -123,9 +114,10 @@ const handleSpotClick = (id:number) => {
     font-weight: bold;
 }
 
-a:hover {  
-    text-decoration: underline;  
+a:hover {
+    text-decoration: underline;
 }
+
 .right-aligned {
     display: flex;
     flex-direction: column;
