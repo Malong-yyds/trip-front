@@ -6,7 +6,7 @@
             </el-image>
 
             <div class="spot-info">
-                <h2>{{ spot.name }}</h2>
+                <h2><a target="_blank" :href="getMapUrl(spot.name)">{{ spot.name }}</a></h2>
                 <p><b>评分:</b> {{ spot.average_score ? spot.average_score : '暂无评' }}分</p>
                 <p><b>地址:</b> {{ spot.address }}</p>
                 <p><b>开放时间:</b> {{ spot.opening_hours ? spot.opening_hours : '具体以现场为准' }}</p>
@@ -29,7 +29,7 @@
                     <el-button @click="showDrawer" :icon="Edit">发表评论</el-button>
                 </div>
                 <UserReview :msg="attId"></UserReview>
-               
+
             </div>
             <el-drawer v-model="drawer" direction="btt" size="46%">
                 <PostReview :msg="attId"></PostReview>
@@ -37,65 +37,70 @@
 
         </div>
     </div>
-</template>  
-    
+</template>
+
 <script setup lang="ts">
-    import PostReview from "./components/PostReview.vue";
-    import { attractionDetail } from '/@/api';
-    import { Edit } from '@element-plus/icons-vue'
-    import  UserReview  from "./components/UserReview.vue";
-    import { useStore } from '/@/store/modules/user';
+import PostReview from "./components/PostReview.vue";
+import { attractionDetail } from '/@/api';
+import { Edit } from '@element-plus/icons-vue'
+import UserReview from "./components/UserReview.vue";
+import { useStore } from '/@/store/modules/user';
 
-    const route = useRoute()
-    const store=useStore()
-    const drawer = ref(false)
-    const attId = ref(Number(route.query.id))
+const route = useRoute()
+const store = useStore()
+const drawer = ref(false)
+const attId = ref(Number(route.query.id))
 
-    const showDrawer = () => {
+const showDrawer = () => {
 
-        if (!store.isLoggedIn) {  
+    if (!store.isLoggedIn) {
         // 如果用户未登录，提示用户登录  
-            alert('请先登录');  
-            router.push('/login');  
-        } else {  
-            drawer.value = true
-        }  
-        
+        alert('请先登录');
+        router.push('/login');
+    } else {
+        drawer.value = true
     }
-    const spot = reactive({
-        name: null,
-        image_link: null,
-        address: null,
-        average_score: null,
-        review_count: null,
-        opening_hours: null,
-        official_phone: null,
-        description: null,
-        tips: null,
+
+}
+const spot = reactive({
+    name: null,
+    image_link: null,
+    address: null,
+    average_score: null,
+    review_count: null,
+    opening_hours: null,
+    official_phone: null,
+    description: null,
+    tips: null,
+})
+
+const getData = () => {
+    attractionDetail({ attId: Number(route.query.id) }).then(res => {
+        //  Object.assign() 会将这些额外的属性也复制到 spot 中
+        Object.assign(spot, res.data)
+    }).catch(e => {
+        console.log(e);
+
     })
+}
+onMounted(() => {
+    getData()
+})
 
-    const getData = () => {
-        attractionDetail({ attId: Number(route.query.id) }).then(res => {
-            //  Object.assign() 会将这些额外的属性也复制到 spot 中
-            Object.assign(spot, res.data)
-        }).catch(e => {
-            console.log(e);
+// 监听路由参数的变化，并在变化时更新 attId  
+watch(() => route.query.id, (newVal) => {
+    attId.value = Number(newVal);
+    getData()
 
-        })
-    }
-    onMounted(() => {
-        getData()
-    })
+});
 
-    // 监听路由参数的变化，并在变化时更新 attId  
-    watch(() => route.query.id, (newVal) => {  
-      attId.value = Number(newVal);  
-      getData()
-      
-    });  
-</script>  
-    
-<style scoped> .spot-page {
+const getMapUrl = (name: string) => {
+    return `https://ditu.amap.com/search?query=${encodeURIComponent(name)}`;
+}
+</script>
+
+<style scoped>
+ .spot-page {
      display: flex;
      flex-direction: column;
      width: 100%;
@@ -142,6 +147,11 @@
      font-weight: bold;
  }
 
+ .spot-info h2 a {
+     text-decoration: none;
+     color: inherit
+ }
+
  .spot-info p {
      font-size: 16px;
      margin-bottom: 10px;
@@ -175,6 +185,4 @@
      flex-direction: column;
      padding: 10px;
  }
-
-
- </style>
+</style>
