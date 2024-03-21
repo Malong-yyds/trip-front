@@ -65,6 +65,9 @@ height: 100%;
 .el-menu-item {  
   font-size: 20px;
 }
+.el-menu .el-menu-item.is-active {
+    color: #f8961e;
+}
 .el-menu {  
   border-right: none !important;  
 }
