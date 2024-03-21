@@ -6,7 +6,7 @@
                 <div class="carousel-item" @click="handleItemClick(item.attraction_id)">
 
                     <div class="carousel-img-wrapper">
-                        <img :src="item.image_link" :alt="item.name" class="carousel-img">
+                        <img :src="item.image_link.split(';')[0]" :alt="item.name" class="carousel-img">
                     </div>
                     <div class="carousel-caption" v-if="item.name">{{ item.name }}</div>
                    
@@ -18,7 +18,7 @@
             <div class="title">专属推荐</div>
             <div v-for="item in guessItems" :key="item.id" class="guess-item" @click="handleItemClick(item.id)">
                 <div class="guess-img-wrapper">
-                    <img :src="item.image_link" alt="Guess you like" class="guess-img">
+                    <img :src="item.image_link.split(';')[0]" alt="Guess you like" class="guess-img">
                 </div>
                 <span class="guess-title">{{ item.name }}</span>
             </div>
@@ -44,7 +44,7 @@ const getUserRecommend = async () => {
 }
 onMounted(() => {
     popularRecommend().then(res => {
-        // console.log(res);
+
         hotItems.value = res.data
     })
 
@@ -101,7 +101,7 @@ const handleItemClick = (id: number) => {
     white-space: nowrap;
 }
 
-::v-deep .el-carousel__indicator--horizontal {
+:deep(.el-carousel__indicator--horizontal) {
     display: none;
 }
 

@@ -3,7 +3,7 @@
         <el-card v-for="(spot, index) in spots" :key="index" class="spot-card">
             <el-row>
                 <el-col :span="5">
-                    <img class="scenic-spot-image" :src="spot.image_link" alt="景点图片" />
+                    <img class="scenic-spot-image" :src="spot.image_link.split(';')[0]" alt="景点图片" />
                 </el-col>
                 <el-col :span="9" class="left-aligned">
                     <h1>
