@@ -1,51 +1,146 @@
 <template>
-    <div class="spot-page">
+    <div class="spot-page" ref="containerRef">
 
-        <div class="upper-section section">
-            <el-image :src="spot.image_link" alt="景点图片" class="image">
-            </el-image>
+        <div class="upper-section section" id="part1">
 
+            <div class="video-overlay" @mousedown="startDrag" @mousemove="drag" @mouseup="endDrag" @mouseleave="endDrag"
+                ref="draggableDiv" v-if="spot.video">
+               
+                <video class="draggable-video" controls :src="baseUrl+spot.video" alt="景点视频"></video>
+                <!-- <iframe src="//player.bilibili.com/player.html?aid=1851189799&cid=1450750881&page=1"   
+        scrolling="no" border="0" frameborder="no" framespacing="0"   
+        allowfullscreen="true" width="640" height="480">   
+</iframe> -->
+            </div>
+            <div class="carousel">
+                <el-carousel>
+                    <el-carousel-item v-for="(item, index) in spot.image_link.split(';')" :key="index"
+                        class="carousel-item">
+                        <el-image :src="item" alt="景点图片" class="carousel-image"></el-image>
+                    </el-carousel-item>
+                </el-carousel>
+            </div>
             <div class="spot-info">
-                <h2><a target="_blank" :href="getMapUrl(spot.name)">{{ spot.name }}</a></h2>
+                <h2><a target="_blank" :href="getMapUrl(spot.name!)">{{ spot.name }}</a></h2>
                 <p><b>评分:</b> {{ spot.average_score ? spot.average_score : '暂无评' }}分</p>
                 <p><b>地址:</b> {{ spot.address }}</p>
                 <p><b>开放时间:</b> {{ spot.opening_hours ? spot.opening_hours : '具体以现场为准' }}</p>
                 <p><b>官方电话: </b>{{ spot.official_phone ? spot.official_phone : '暂无' }}</p>
+
             </div>
         </div>
 
+
         <div class="lower-section">
-            <div class="section">
-                <h3>景点详情</h3>
+            <div class="section" id="part2">
+                <h3>景点介绍</h3>
                 <p>{{ spot.description }}</p>
             </div>
-            <div class="section" v-if="spot.tips">
+            <div class="section" v-if="spot.tips" id="part3">
                 <h3>必看贴士</h3>
                 <p>{{ spot.tips }}</p>
             </div>
-            <div class="section">
+            <div class="section" id="part4">
                 <div class="comments-button">
                     <h3>用户评价</h3>
                     <el-button @click="showDrawer" :icon="Edit">发表评论</el-button>
                 </div>
                 <UserReview :msg="attId"></UserReview>
-
             </div>
             <el-drawer v-model="drawer" direction="btt" size="46%">
                 <PostReview :msg="attId"></PostReview>
             </el-drawer>
-
+            <div class="section" id="part5">
+                <h3>周围美食</h3>
+                <p>{{ spot.description }}</p>
+            </div>
+            <div class="section" id="part6">
+                <h3>民宿酒店</h3>
+                <p>{{ spot.description }}</p>
+            </div>
+            <div class="section" id="part7">
+                <h3>周边景点</h3>
+                <p>{{ spot.description }}</p>
+            </div>
         </div>
+        <el-backtop :visibility-height=0 :bottom="100" style="left: 250px">
+            <el-anchor>
+                <el-anchor-link href="#part1">
+                    <el-icon :size="20">
+                        <ArrowUpBold />
+                    </el-icon>
+                </el-anchor-link>
+                <el-anchor-link href="#part2" title="介绍" />
+                <el-anchor-link href="#part3" title="贴士" />
+                <el-anchor-link href="#part4" title="评论" />
+                <el-anchor-link href="#part5" title="美食" />
+                <el-anchor-link href="#part6" title="住宿" />
+                <el-anchor-link href="#part7" title="周边" />
+            </el-anchor>
+        </el-backtop>
     </div>
+
 </template>
 
 <script setup lang="ts">
 import PostReview from "./components/PostReview.vue";
 import { attractionDetail } from '/@/api';
-import { Edit } from '@element-plus/icons-vue'
+import { Edit, Picture as IconPicture, Top, ArrowUpBold } from '@element-plus/icons-vue'
 import UserReview from "./components/UserReview.vue";
 import { useStore } from '/@/store/modules/user';
+import './SpotDetail.css';
+import {baseUrl} from '/@/service'
+// 拖动参数
+const draggableDiv = ref<HTMLElement | null>(null);
+let dragging = false;
+let currentX = 0;
+let currentY = 0;
+let initialX = 0;
+let initialY = 0;
+let offsetX = 0;
+let offsetY = 0;
 
+// 开始拖拽的函数  
+const startDrag = (event: MouseEvent) => {  
+    // 设置dragging为true，表示拖拽操作开始  
+    dragging = true;  
+    // 计算鼠标的初始X坐标与offsetX的差值，保存到initialX  
+    initialX = event.clientX - offsetX;  
+    initialY = event.clientY - offsetY;  
+};  
+  
+// 拖拽中的函数  
+const drag = (event: MouseEvent) => {   
+    if (dragging) {  
+        // 阻止事件的默认行为  
+        event.preventDefault();  
+        // 计算鼠标的当前X坐标与initialX的差值，得到新的X坐标偏移量  
+        const newX = event.clientX - initialX;  
+        const newY = event.clientY - initialY;  
+        // 更新offsetX的值  
+        offsetX = newX;  
+        offsetY = newY;  
+        // 调用setTranslate函数，根据新的X和Y偏移量来移动元素  
+        setTranslate(newX, newY);  
+    }  
+};  
+  
+// 结束拖拽的函数  
+const endDrag = () => {  
+    // 设置dragging为false，表示拖拽操作结束  
+    dragging = false;  
+};  
+  
+// 设置元素平移的函数  
+const setTranslate = (xPos: number, yPos: number) => {  
+    // 如果draggableDiv有值（即存在对应的DOM元素）  
+    if (draggableDiv.value) {  
+        // 使用CSS的transform属性，设置元素的平移效果  
+        draggableDiv.value.style.transform = `translate(${xPos}px, ${yPos}px)`;  
+    }  
+};
+
+const router = useRouter()
 const route = useRoute()
 const store = useStore()
 const drawer = ref(false)
@@ -64,7 +159,8 @@ const showDrawer = () => {
 }
 const spot = reactive({
     name: null,
-    image_link: null,
+    video:null,
+    image_link: '',
     address: null,
     average_score: null,
     review_count: null,
@@ -78,6 +174,7 @@ const getData = () => {
     attractionDetail({ attId: Number(route.query.id) }).then(res => {
         //  Object.assign() 会将这些额外的属性也复制到 spot 中
         Object.assign(spot, res.data)
+
     }).catch(e => {
         console.log(e);
 
@@ -85,8 +182,17 @@ const getData = () => {
 }
 onMounted(() => {
     getData()
+    // 确保在组件挂载后绑定事件  
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('mouseleave', endDrag);
 })
-
+// 在组件卸载时移除事件监听器，避免内存泄漏  
+onUnmounted(() => {
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('mouseleave', endDrag);
+});
 // 监听路由参数的变化，并在变化时更新 attId  
 watch(() => route.query.id, (newVal) => {
     attId.value = Number(newVal);
@@ -94,95 +200,18 @@ watch(() => route.query.id, (newVal) => {
 
 });
 
+// 高德地图导航
 const getMapUrl = (name: string) => {
     return `https://ditu.amap.com/search?query=${encodeURIComponent(name)}`;
 }
+
+
 </script>
 
 <style scoped>
- .spot-page {
-     display: flex;
-     flex-direction: column;
-     width: 100%;
-     /* margin: 0 auto; */
-     padding: 0 50px;
-     box-sizing: border-box;
-     text-align: left;
- }
-
- .upper-section {
-     display: flex;
-     align-items: flex-start;
-
- }
-
- .section {
-     border: 1px solid #c6e2ff17;
-     background-color: #c6e2ff17;
-     width: 90%;
-     padding: 50px;
-
-     margin-bottom: 20px;
-
- }
-
- .image {
-     flex: 1;
-     margin-right: 20px;
-
- }
-
- .spot-info {
-     flex: 1;
-     max-width: 50%;
-     display: flex;
-     flex-direction: column;
-     align-items: flex-start;
-
- }
-
- .spot-info h2 {
-     font-size: 25px;
-     margin-bottom: 5px;
-     font-weight: bold;
- }
-
- .spot-info h2 a {
-     text-decoration: none;
-     color: inherit
- }
-
- .spot-info p {
-     font-size: 16px;
-     margin-bottom: 10px;
- }
-
- .lower-section {
-     display: flex;
-     flex-direction: column;
-     align-items: flex-start;
-     /* padding:0 20px; */
- }
-
- .lower-section h3 {
-     font-family: PingFangSC-Medium;
-     font-size: 20px;
-     color: #151313;
-     line-height: 20px;
-     font-weight: bold;
-     margin: 16px 0 10px 0;
- }
-
- .comments-button {
-     display: flex;
-     flex-direction: row;
-     justify-content: space-between;
- }
-
- .comments {
-     display: flex;
-     margin-bottom: 10px;
-     flex-direction: column;
-     padding: 10px;
- }
+.el-anchor {
+    --el-anchor-active-color: #f8961e;
+    --el-anchor-marker-bg-color: none;
+}
 </style>
+
