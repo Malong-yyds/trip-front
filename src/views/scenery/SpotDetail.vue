@@ -18,11 +18,10 @@
             </div>
             <div class="spot-info">
                 <h2><a target="_blank" :href="getMapUrl(spot.name!)">{{ spot.name }}</a></h2>
-                <p><b>评分:</b> {{ spot.average_score ? spot.average_score : '暂无评' }}分</p>
+                <p v-if="spot.average_score"><b>评分:</b> {{ spot.average_score }}分</p>
                 <p><b>地址:</b> {{ spot.address }}</p>
                 <p><b>开放时间:</b> {{ spot.opening_hours ? spot.opening_hours : '具体以现场为准' }}</p>
                 <p><b>官方电话: </b>{{ spot.official_phone ? spot.official_phone : '暂无' }}</p>
-                <!-- <p><b>交通方式: </b>{{ spot.official_phone ? spot.official_phone : '暂无' }}</p> -->
 
             </div>
         </div>
@@ -57,18 +56,9 @@
             </div>
             <div class="section" id="part5">
                 <h3>附近美食</h3>
-                <div class="stay">
-                    <el-card style="max-width: 200px" v-for="item in 4">
-
-                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                            style="width: 100%" />
-                        <template #footer>
-                            <span>user</span>
-                            <p>这个非常好吃
-                            </p>
-                        </template>
-                    </el-card>
-                </div>
+               
+                    <SurroundingCuisine></SurroundingCuisine>
+              
             </div>
             <!-- <div class="section" id="part6">
                 <h3>民宿酒店</h3>
@@ -111,9 +101,11 @@
 
 <script setup lang="ts">
 import PostReview from "./components/PostReview.vue";
-import { attractionDetail } from '/@/api';
-import { Edit, Picture as IconPicture, Top, ArrowUpBold } from '@element-plus/icons-vue'
 import UserReview from "./components/UserReview.vue";
+import SurroundingCuisine from "./components/SurroundingCuisine.vue";
+import { attractionDetail } from '/@/api';
+import { Edit, Picture as IconPicture,  ArrowUpBold } from '@element-plus/icons-vue'
+
 import { useStore } from '/@/store/modules/user';
 import './SpotDetail.css';
 import { baseUrl } from '/@/service'
