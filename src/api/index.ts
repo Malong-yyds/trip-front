@@ -36,9 +36,9 @@ export const attractionSearch=(q:string,page:number,pageSize:number)=>{
 // detail   
 export const attractionDetail=(attId:number)=>{
   return request<number,any>({
-    url: '/attraction/detail', 
+    url: '/attraction/detail?attId='+attId, 
     method: 'GET', 
-    params:attId, 
+    // params:attId, 
     
   })
 }
@@ -75,9 +75,9 @@ export const postReview=(data:ReviewParams)=>{
 
 export const userRecommend=(userId:number)=>{
   return request<number,any>({
-    url: '/recommender/user', 
+    url: '/recommender/user?userId='+userId, 
     method: 'GET', 
-    params:userId, 
+    // params:userId, 
     
   })
 }

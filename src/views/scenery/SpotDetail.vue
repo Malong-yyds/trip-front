@@ -180,7 +180,7 @@ const spot = reactive({
 })
 
 const getData = () => {
-    attractionDetail({ attId: Number(route.query.id) }).then(res => {
+    attractionDetail(attId.value).then(res => {
         //  Object.assign() 会将这些额外的属性也复制到 spot 中
         Object.assign(spot, res.data)
 
