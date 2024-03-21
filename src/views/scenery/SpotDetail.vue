@@ -56,27 +56,15 @@
             </div>
             <div class="section" id="part5">
                 <h3>附近美食</h3>
-               
-                    <SurroundingCuisine></SurroundingCuisine>
-              
+
+                <SurroundingCuisine></SurroundingCuisine>
+
             </div>
             <!-- <div class="section" id="part6">
                 <h3>民宿酒店</h3>
-               
-                <div class="stay">
-                    <el-card style="max-width: 200px" v-for="item in 4">
-
-                        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                            style="width: 100%" />
-                        <template #footer>
-                            <span>user</span>
-                            <p>这个非常好吃
-                            </p>
-                        </template>
-                    </el-card>
-                </div>
+               <HomestayHotels></HomestayHotels>
             </div> -->
-          
+
         </div>
         <el-backtop :visibility-height=0 :bottom="100" style="left: 250px">
             <el-anchor>
@@ -89,7 +77,7 @@
                 <el-anchor-link href="#part8" title="交通" />
                 <el-anchor-link href="#part3" title="贴士" />
                 <el-anchor-link href="#part4" title="评论" />
-               
+
                 <!-- <el-anchor-link href="#part6" title="住宿" /> -->
                 <el-anchor-link href="#part7" title="周边" />
                 <el-anchor-link href="#part5" title="美食" />
@@ -103,8 +91,9 @@
 import PostReview from "./components/PostReview.vue";
 import UserReview from "./components/UserReview.vue";
 import SurroundingCuisine from "./components/SurroundingCuisine.vue";
+// import HomestayHotels from "./components/HomestayHotels.vue"
 import { attractionDetail } from '/@/api';
-import { Edit, Picture as IconPicture,  ArrowUpBold } from '@element-plus/icons-vue'
+import { Edit, ArrowUpBold } from '@element-plus/icons-vue'
 
 import { useStore } from '/@/store/modules/user';
 import './SpotDetail.css';
@@ -178,7 +167,7 @@ const showDrawer = () => {
 }
 const spot = reactive({
     name: null,
-    transport:null,
+    transport: null,
     video: null,
     image_link: '',
     address: null,
