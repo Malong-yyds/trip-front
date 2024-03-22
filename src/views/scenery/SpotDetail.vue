@@ -57,7 +57,7 @@
             <div class="section" id="part5">
                 <h3>附近美食</h3>
 
-                <SurroundingCuisine></SurroundingCuisine>
+                <SurroundingCuisine :msg="attId"></SurroundingCuisine>
 
             </div>
             <!-- <div class="section" id="part6">

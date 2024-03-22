@@ -77,7 +77,6 @@ export const userRecommend=(userId:number)=>{
   return request<number,any>({
     url: '/recommender/user?userId='+userId, 
     method: 'GET', 
-    // params:userId, 
     
   })
 }
@@ -87,6 +86,15 @@ export const popularRecommend=()=>{
   return request<number,any>({
     url: '/recommender/popular', 
     method: 'GET',
+    
+  })
+}
+
+
+export const getFood=(arrId:number)=>{
+  return request<number,any>({
+    url: '/attraction/detail/food?attId='+arrId, 
+    method: 'GET', 
     
   })
 }
