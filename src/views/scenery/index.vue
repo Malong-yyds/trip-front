@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-
+import './style/index.css'
 import { attractionSearch } from "/@/api/index";
 import { useStore } from '/@/store/modules/user';
 import { HomeFilled, Location } from "@element-plus/icons-vue";
@@ -96,44 +96,5 @@ const handleSpotClick = (id: number) => {
 </script>
 
 <style scoped>
-.spot-card {
-    margin: 15px;
-    height: fit-content;
-    display: flex;
-    flex-direction: column;
-    border-radius: 8px;
-}
 
-.scenic-spot-image {
-    width: 100%;
-    /* height: 100%; */
-    /* border-radius: 8px 0 0 8px; */
-
-}
-
-.left-aligned {
-    display: flex;
-    text-align: left;
-    flex-direction: column;
-    padding-left: 10%;
-}
-
-.left-aligned h1 {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.right-aligned {
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 20px;
-
-}
 </style>

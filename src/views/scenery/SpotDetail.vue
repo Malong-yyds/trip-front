@@ -96,7 +96,7 @@ import { attractionDetail } from '/@/api';
 import { Edit, ArrowUpBold } from '@element-plus/icons-vue'
 
 import { useStore } from '/@/store/modules/user';
-import './SpotDetail.css';
+import './style/SpotDetail.css';
 import { baseUrl } from '/@/service'
 // 拖动参数
 const draggableDiv = ref<HTMLElement | null>(null);

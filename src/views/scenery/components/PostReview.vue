@@ -43,7 +43,7 @@ const props = defineProps({
 
 const loading = ref(false)
 
-const form = reactive({
+const form = ref({
     attId: props.msg,
     userId: store.userId as unknown as number,
     rating: 0, 
