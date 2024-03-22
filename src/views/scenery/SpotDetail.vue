@@ -52,7 +52,7 @@
             </el-drawer>
             <div class="section" id="part7">
                 <h3>周边景点</h3>
-                <p>{{ spot.description }}</p>
+                <NearAttraction :msg="attId"></NearAttraction>
             </div>
             <div class="section" id="part5">
                 <h3>附近美食</h3>
@@ -91,6 +91,7 @@
 import PostReview from "./components/PostReview.vue";
 import UserReview from "./components/UserReview.vue";
 import SurroundingCuisine from "./components/SurroundingCuisine.vue";
+import NearAttraction from "./components/NearAttraction.vue";
 // import HomestayHotels from "./components/HomestayHotels.vue"
 import { attractionDetail } from '/@/api';
 import { Edit, ArrowUpBold } from '@element-plus/icons-vue'
@@ -98,6 +99,7 @@ import { Edit, ArrowUpBold } from '@element-plus/icons-vue'
 import { useStore } from '/@/store/modules/user';
 import './style/SpotDetail.css';
 import { baseUrl } from '/@/service'
+
 // 拖动参数
 const draggableDiv = ref<HTMLElement | null>(null);
 let dragging = false;

@@ -1,23 +1,24 @@
 <template>
-    <div class="cuisine">
+    <div class="spot">
 
-        <el-card style="width: 200px" v-for="item in cuisineData">
+        <el-card style="width: 200px" v-for="item in spotData">
 
-            <img :src="item.img" class="cuisine-image" alt="alt"/>
+            <img :src="item.image_link.split(';')[0]" class="spot-image" alt="alt"/>
             <template #footer>
-                <span><b>{{ item.name  }} </b></span>
-                 <el-tag type="primary" v-if="item.label">{{item.label}}</el-tag>
+               <a @click="handleSpotClick(item.id)"><span><b>{{ item.name  }} </b></span></a> 
+                 <el-tag type="success" v-if="item.average_score">{{item.average_score}}</el-tag>
             </template>
         </el-card>
     </div>
 </template>
 
 <script setup lang="ts">
-import { getFood } from '/@/api';
-interface cuisineItem{
+import { getNearAtt } from '/@/api';
+interface spotItem{
+id:number,
 name:string,
-img:string,
-label:string
+image_link:string,
+average_score:number
 }
 const props = defineProps({
     msg: {
@@ -26,14 +27,14 @@ const props = defineProps({
     }
 })
 
-
+const router=useRouter()
 const attId = ref(props.msg)
-const cuisineData=ref<cuisineItem[]>([])
+const spotData=ref<spotItem[]>([])
 const getData = () => {
 
-    getFood(attId.value).then(res => {
+    getNearAtt(attId.value).then(res => {
         console.log(res);
-        cuisineData.value=res.data
+        spotData.value=res.data
     }).catch(e => {
         console.log(e);
 
@@ -50,17 +51,25 @@ watch(props, (newValue) => {
     getData()
 
 })
+
+const handleSpotClick = (id: number) => {
+    router.push({
+        name: 'SpotDetail',
+        query: { id }
+    });
+
+};
 </script>
 
 <style scoped>
-.cuisine {  
+.spot {  
     display: flex;  
     flex-direction: row;  
     justify-content: space-between;  
     text-align: center;
 }  
   
-.cuisine-image {  
+.spot-image {  
     width: 100%; 
     height: 100px; /* 保持图片的原始宽高比 */  
     /* object-fit: cover;    */

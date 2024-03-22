@@ -20,12 +20,6 @@ export const login = (data: UserParams) => {
 }
 
 
-export interface PageParams {
-  q:string
-  page:number
-  pageSize:number
-}
-
 export const attractionSearch=(q:string,page:number,pageSize:number)=>{
   return request<number,any>({
     url: '/attraction/search'+'?page='+page+'&pageSize='+pageSize+'&q='+q, 
@@ -94,6 +88,14 @@ export const popularRecommend=()=>{
 export const getFood=(arrId:number)=>{
   return request<number,any>({
     url: '/attraction/detail/food?attId='+arrId, 
+    method: 'GET', 
+    
+  })
+}
+
+export const getNearAtt=(arrId:number)=>{
+  return request<number,any>({
+    url: '/attraction/detail/att?attId='+arrId, 
     method: 'GET', 
     
   })
