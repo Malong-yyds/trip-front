@@ -54,10 +54,20 @@
 </template>
 
 <script setup lang="ts">
-
+import './style/UserReview.css'
 import { attractionReviews, reviewLike } from '/@/api';
 import {baseUrl} from '/@/service'
 import { useStore } from '/@/store/modules/user';
+
+interface commentItem {
+    username:string,
+    rating:number,
+    comment_content:string,
+    image_paths:string,
+    time_posted:string,
+    review_id:number,
+    like_count:number
+}
 const avatarUrl = ref('/src/assets/user.png');
 const props = defineProps({
     msg: {
@@ -67,7 +77,7 @@ const props = defineProps({
 });
 const store=useStore()
 const router=useRouter()
-const comments = ref([])
+const comments = ref<commentItem[]>([])
 const totalComments = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(5)
@@ -100,7 +110,7 @@ const handleLike = (id: number) => {
         alert('请先登录');  
         router.push('/login');  
     } else {  
-        reviewLike({ reviewId: id }).then(res => {
+        reviewLike(id).then(res => {
         getData()
         console.log(res);
         
@@ -110,12 +120,6 @@ const handleLike = (id: number) => {
     }
 }
 
-// 计算属性，用于分页显示评论  
-const paginatedComments = computed(() => {
-    const start = (currentPage.value - 1) * pageSize.value;
-    const end = start + pageSize.value;
-    return comments.value.slice(start, end);
-});
 
 // 处理分页变化  
 const handlePageChange = (newPage: number) => {
@@ -126,77 +130,5 @@ const handlePageChange = (newPage: number) => {
 </script>
 
 <style scoped>
-.comments {
-    display: flex;
-    margin-bottom: 10px;
-    flex-direction: column;
-    padding: 10px;
-}
 
-.comment {
-    display: flex;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.comment-avatar {
-    width: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px;
-}
-
-.avatar {
-    margin-bottom: 5px;
-    width: 100%
-}
-
-.comment-info {
-    flex: 1;
-    padding: 0 20px;
-}
-
-.comment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.comment-content {
-    font-size: 16px;
-    line-height: 1.5;
-    padding: 10px;
-}
-
-.comment-imgs {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.image-wrapper {
-    margin: 5px;
-    width: 135px;
-}
-
-.comment-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-}
-
-.like-info {
-    display: flex;
-    align-items: center;
-
-}
-
-.like-icon {
-    margin-right: 5px;
-    width: 20px;
-    height: 20px;
-}
 </style>

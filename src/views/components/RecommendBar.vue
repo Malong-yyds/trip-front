@@ -9,11 +9,11 @@
                         <img :src="item.image_link.split(';')[0]" :alt="item.name" class="carousel-img">
                     </div>
                     <div class="carousel-caption" v-if="item.name">{{ item.name }}</div>
-                   
+
                 </div>
             </el-carousel-item>
         </el-carousel>
-    
+
         <div v-if="store.isLoggedIn" class="guess-you-like">
             <div class="title">专属推荐</div>
             <div v-for="item in guessItems" :key="item.id" class="guess-item" @click="handleItemClick(item.id)">
@@ -27,17 +27,28 @@
 </template>
 
 <script setup lang="ts">
-import { userRecommend, popularRecommend } from '/@/api';
-import { useStore } from '/@/store/modules/user';
-import  './style/RecommendBar.css'
+import { userRecommend, popularRecommend } from '/@/api'
+import { useStore } from '/@/store/modules/user'
+import './style/RecommendBar.css'
 
+interface CommonItem {
+    image_link: string,
+    name: string
+}
+interface HotItem extends CommonItem {
+    attraction_id: number;
+}
+
+interface GuessItem extends CommonItem {
+    id: number;
+}
 const store = useStore();
 const router = useRouter()
-const hotItems = ref([])
-const guessItems = ref([])
+const hotItems = ref<HotItem[]>([])
+const guessItems = ref<GuessItem[]>([])
 
 const getUserRecommend = async () => {
-    await userRecommend( store.userId as unknown as number ).then(res => {
+    await userRecommend(store.userId as unknown as number).then(res => {
         // console.log(res);
         guessItems.value = res.data
     })

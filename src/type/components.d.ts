@@ -7,8 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    DDay: typeof import('./../components/three-line-pic/src/DDay.vue')['default']
-    DMonth: typeof import('./../components/three-line-pic/src/DMonth.vue')['default']
+
     ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAnchor: typeof import('element-plus/es')['ElAnchor']
     ElAnchorLink: typeof import('element-plus/es')['ElAnchorLink']
@@ -42,12 +41,9 @@ declare module 'vue' {
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTag: typeof import('element-plus/es')['ElTag']
     ElUpload: typeof import('element-plus/es')['ElUpload']
-    JDay: typeof import('./../components/three-line-pic/src/JDay.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    YwzChart: typeof import('./../components/three-line-pic/src/YwzChart.vue')['default']
-    YwzForm: typeof import('./../components/ywz-form/src/YwzForm.vue')['default']
-    YwzTable: typeof import('./../components/ywz-table/src/YwzTable.vue')['default']
-  }
+}
 }

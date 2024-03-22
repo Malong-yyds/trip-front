@@ -33,12 +33,21 @@
 import { attractionSearch } from "/@/api/index";
 import { useStore } from '/@/store/modules/user';
 import { HomeFilled, Location } from "@element-plus/icons-vue";
+
+interface soptItem {
+    name:string,
+    image_link:string,
+    attraction_id:number,
+    address:string,
+    average_score:number,
+    review_count:number,
+}
 const router = useRouter();
 const store = useStore();
 const route = useRoute()
-const flag = ref('')
+const flag = ref()
 
-const spots = ref([])
+const spots = ref<soptItem[]>([])
 const totalSpots = ref(0);
 const pageSize = ref(5);
 const currentPage = ref(1);
