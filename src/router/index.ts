@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import SceneryPage from '/@/views/scenery/index.vue'
 import SpotDetail from '/@/views/scenery/SpotDetail.vue';
+import GroupSpot from '/@/views/scenery/GroupSpot.vue'
 import MapPage from '../views/main/visualization/MapPage.vue';
 import MainPage from '../views/main/MainPage.vue';
 import { useStore } from "/@/store/modules/user";
@@ -42,6 +43,12 @@ const routes: RouteRecordRaw[] = [
         path: 'detail',
         name: 'SpotDetail',
         component: SpotDetail
+      },
+      {
+        // 只有这个路由需要登陆才能访问，路由守卫怎么写
+        path: 'group',
+        name: 'GroupSpot',
+        component: GroupSpot
       },
       {
         name: 'profile',

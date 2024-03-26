@@ -85,17 +85,25 @@ export const popularRecommend=()=>{
 }
 
 
-export const getFood=(arrId:number)=>{
+export const getFood=(attId:number)=>{
   return request<number,any>({
-    url: '/attraction/detail/food?attId='+arrId, 
+    url: '/attraction/detail/food?attId='+attId, 
     method: 'GET', 
     
   })
 }
 
-export const getNearAtt=(arrId:number)=>{
+export const getNearAtt=(attId:number)=>{
   return request<number,any>({
-    url: '/attraction/detail/att?attId='+arrId, 
+    url: '/attraction/detail/att?attId='+attId, 
+    method: 'GET', 
+    
+  })
+}
+
+export const groupRemmend=(groupId:number)=>{
+  return request<number,any>({
+    url: '/group?groupId='+groupId, 
     method: 'GET', 
     
   })
