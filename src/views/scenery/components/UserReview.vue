@@ -110,7 +110,7 @@ const handleLike = (id: number) => {
         alert('请先登录');  
         router.push('/login');  
     } else {  
-        reviewLike(id).then(res => {
+        reviewLike({"reviewId":id}).then(res => {
         getData()
         console.log(res);
         

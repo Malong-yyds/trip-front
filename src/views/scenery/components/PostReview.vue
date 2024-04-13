@@ -50,6 +50,7 @@ const form = ref({
     content: '',
     image_paths: []
 })
+
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 const handleExceed = (files: any, fileList: any) => {
@@ -76,31 +77,34 @@ const beforeUpload = (file: any) => {
 const onClick = async () => {
     loading.value = true
     const formData = new FormData();
-    formData.append('attId', form.attId);
-    formData.append('userId', form.userId);
-    formData.append('rating', form.rating);
-    formData.append('content', form.content);
-    form.image_paths.forEach((image, index) => {
+    formData.append('attId', form.value.attId);
+    formData.append('userId', form.value.userId);
+    formData.append('rating', form.value.rating);
+    formData.append('content', form.value.content);
+    // console.log('click',form,form.value,form.value.image_paths);
+    
+    form.value.image_paths.forEach((image, index:number) => {
         formData.append(`image_paths[${index}]`, image.raw);
     });
-    await postReview(form).then(res => {
-        console.log('form', form); 
+    await postReview(form.value).then(res => {
+        console.log('form', form.value); 
         loading.value = false
         if(res.code==200){
             ElMessage({
                 type:'success',
                 message:'发布成功'
             })
-            form.rating=0
-            form.content=''
+            form.value.rating=0
+            form.value.content=''
+            form.value.image_paths=[]
         }
     }).catch(e => {
         console.log(e);
     })
 }
-const handleUploadSuccess = (response) => {
+const handleUploadSuccess = (response:any) => {
     if (response && response.url) {
-        form.image_paths.push({ url: response.url });
+        form.value.image_paths.push({ url: response.url });
         dialogImageUrl.value = response.url;
         dialogVisible.value = true;
     }

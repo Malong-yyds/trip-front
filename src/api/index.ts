@@ -46,17 +46,27 @@ export const attractionReviews=(attId:number,page:number,pageSize:number)=>{
 }
 
 // like    
-export const reviewLike=(reviewId:number)=>{
+export const reviewLike=(data:number)=>{
   return request<number,any>({
     url: '/review/like', 
     method: 'POST', 
-    data:reviewId,
+    data,
    
   })
 }
 
 // addreview
-export const postReview=(data:ReviewParams)=>{
+// export const postReview=(data:ReviewParams)=>{
+//   return request<any,any>({
+//     url: '/review/add', 
+//     method: 'POST', 
+//     data,
+//     headers:{
+//       'Content-Type':'multipart/form-data'
+//     }
+//   })
+// }
+export const postReview=(data:any)=>{
   return request<any,any>({
     url: '/review/add', 
     method: 'POST', 
